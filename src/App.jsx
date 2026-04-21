@@ -19,6 +19,7 @@ function App() {
   const categories = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
 
   const addTransaction = (t) => setTransactions([...transactions, t]);
+  const removeTransaction = (id) => setTransactions(transactions.filter(t => t.id !== id));
 
   return (
     <div className="app">
@@ -27,7 +28,7 @@ function App() {
 
       <Summary transactions={transactions} />
       <TransactionForm categories={categories} onAdd={addTransaction} />
-      <TransactionList transactions={transactions} categories={categories} />
+      <TransactionList transactions={transactions} categories={categories} onDelete={removeTransaction} />
     </div>
   );
 }
