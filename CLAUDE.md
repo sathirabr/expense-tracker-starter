@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the **starter** project for Mosh Hamedani's Claude Code course. Per the README, it was **intentionally shipped with a bug, poor UI, and messy code** — the course walks through fixing them with Claude. Treat existing defects as expected course material, not accidents to silently "clean up" unless the user asks.
 
-Note: transaction `amount` is stored as a number in state. The `<input type="number">` in the add-transaction form yields a string, so `handleSubmit` coerces it with `Number(amount)` before pushing into state — keep that coercion if you touch the submit path.
+Note: transaction `amount` is stored as a number in state. The `<input type="number">` in `TransactionForm` yields a string, so the submit handler coerces it with `Number(amount)` before calling `onAdd` — keep that coercion if you touch the submit path.
 
 ## Commands
 
@@ -22,10 +22,15 @@ No test framework is configured — there is no `test` script and no testing lib
 
 ## Architecture
 
-Single-page React 19 + Vite app. The entire application is one component:
+Single-page React 19 + Vite app. No routing, no persistence — state resets on reload.
 
 - `src/main.jsx` — React root, wraps `<App />` in `<StrictMode>`.
-- `src/App.jsx` — **everything** lives here: seed transactions, form state, filter state, derived totals, submit handler, and the rendered UI (summary cards, add-transaction form, filterable transactions table). There are no sub-components, no routing, no hooks beyond `useState`, no persistence — state resets on reload.
+- `src/App.jsx` — owns the canonical `transactions` array (seed data) and the shared `categories` list. Holds no UI state. Wires the three child components together via props and an `addTransaction` callback.
+- `src/Summary.jsx` — receives `transactions` and derives `totalIncome` / `totalExpenses` / `balance` itself. Pure render.
+- `src/TransactionForm.jsx` — owns its own form state (`description`, `amount`, `type`, `category`). Calls `onAdd(transaction)` on submit and resets its inputs.
+- `src/TransactionList.jsx` — owns its own filter state (`filterType`, `filterCategory`). Receives `transactions` + `categories` and renders the filtered table.
 - `src/App.css` / `src/index.css` — styles.
+
+State-ownership rule: `App` owns persistent data; each child component owns its own *local* UI state (form inputs, filter selections). When adding a feature, prefer keeping new local state inside the component that uses it; only lift to `App` if another sibling needs to read it.
 
 ESLint uses the flat-config format (`eslint.config.js`) with `@eslint/js` recommended, `eslint-plugin-react-hooks`, and `eslint-plugin-react-refresh` (Vite variant). The `no-unused-vars` rule ignores identifiers matching `^[A-Z_]`.
