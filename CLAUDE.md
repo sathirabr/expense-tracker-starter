@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the **starter** project for Mosh Hamedani's Claude Code course. Per the README, it was **intentionally shipped with a bug, poor UI, and messy code** — the course walks through fixing them with Claude. Treat existing defects as expected course material, not accidents to silently "clean up" unless the user asks.
 
-One known defect worth knowing: transaction `amount` values are stored as strings in state (see the seed data in `src/App.jsx`), so `reduce((sum, t) => sum + t.amount, 0)` for `totalIncome` / `totalExpenses` concatenates strings instead of summing numbers. The `balance` calculation then coerces via `-`, producing wrong totals. Don't fix this unless the user asks — it's a deliberate teaching example.
+Note: transaction `amount` is stored as a number in state. The `<input type="number">` in the add-transaction form yields a string, so `handleSubmit` coerces it with `Number(amount)` before pushing into state — keep that coercion if you touch the submit path.
 
 ## Commands
 
