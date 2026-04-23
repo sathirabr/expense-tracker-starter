@@ -29,23 +29,29 @@ function TransactionForm({ categories, onAdd }) {
     <div className="add-transaction">
       <h2>Add Transaction</h2>
       <form onSubmit={handleSubmit}>
+        <label htmlFor="tx-description" className="visually-hidden">Description</label>
         <input
+          id="tx-description"
           type="text"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
+        <label htmlFor="tx-amount" className="visually-hidden">Amount</label>
         <input
+          id="tx-amount"
           type="number"
           placeholder="Amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
-        <select value={type} onChange={(e) => setType(e.target.value)}>
+        <label htmlFor="tx-type" className="visually-hidden">Type</label>
+        <select id="tx-type" value={type} onChange={(e) => setType(e.target.value)}>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <label htmlFor="tx-category" className="visually-hidden">Category</label>
+        <select id="tx-category" value={category} onChange={(e) => setCategory(e.target.value)}>
           {categories.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
